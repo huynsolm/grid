@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('initial fixture has fixed A4 size and preserves Korean newlines', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   const paper = page.locator('.paper');
   await expect(paper).toHaveAttribute('data-orientation', 'portrait');
   const size = await paper.evaluate(el => ({ w: getComputedStyle(el).width, h: getComputedStyle(el).height }));
@@ -12,7 +12,7 @@ test('initial fixture has fixed A4 size and preserves Korean newlines', async ({
 });
 
 test('print uses same paper and hides controls, warnings, and zoom transform', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   await page.locator('.paper').evaluate(el => el.setAttribute('data-identity', 'original'));
   await page.getByLabel('화면 확대').selectOption('0.5');
   await page.emulateMedia({ media: 'print' });
@@ -25,7 +25,7 @@ test('print uses same paper and hides controls, warnings, and zoom transform', a
 });
 
 test('orientation, margin and grid-only mode do not discard fixture text', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   await page.getByLabel('용지 방향').selectOption('landscape');
   await page.getByLabel('안전 여백').selectOption('20');
   await page.getByLabel('출력 모드').selectOption('grid-only');
@@ -39,7 +39,7 @@ test('orientation, margin and grid-only mode do not discard fixture text', async
 });
 
 test('print button waits for fonts and invokes native print without duplicating paper', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   await page.evaluate(() => { window.print = () => { document.body.dataset.printCalled = 'yes'; }; });
   await page.getByRole('button', { name: '인쇄 / PDF로 저장' }).click();
   await expect(page.locator('body')).toHaveAttribute('data-print-called', 'yes');
@@ -47,7 +47,7 @@ test('print button waits for fonts and invokes native print without duplicating 
 });
 
 test('invalid font leaves a warning and native-print warning stays off paper', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   await page.getByLabel('테스트 폰트 파일').setInputFiles({ name: 'broken.woff2', mimeType: 'font/woff2', buffer: Buffer.from('not-a-font') });
   await expect(page.getByRole('button', { name: '인쇄 / PDF로 저장' })).toBeDisabled();
   await expect(page.locator('#status')).toContainText('불러오지 못했습니다');
@@ -59,7 +59,7 @@ test('invalid font leaves a warning and native-print warning stays off paper', a
 });
 
 test('all margin and orientation fixtures retain fixed print dimensions', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?validation=1');
   for (const orientation of ['portrait', 'landscape']) {
     for (const margin of ['0', '5', '20']) {
       await page.getByLabel('용지 방향').selectOption(orientation);

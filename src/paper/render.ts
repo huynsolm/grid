@@ -1,4 +1,6 @@
 import { dimensions, mixedText, type FixtureSettings } from '../validation/print-fixture';
+import { gridLines } from './grid';
+import { DEFAULT_GRID } from '../model/document';
 
 const NS = 'http://www.w3.org/2000/svg';
 function line(x1: number, y1: number, x2: number, y2: number) {
@@ -11,9 +13,12 @@ function line(x1: number, y1: number, x2: number, y2: number) {
 export function renderPaper(paper: HTMLElement, settings: FixtureSettings) {
   const { width, height } = dimensions(settings.orientation);
   const m = settings.margin;
+  const validation = settings.validation !== false;
+  const gridSettings = settings.grid ?? DEFAULT_GRID;
   paper.dataset.orientation = settings.orientation;
   paper.dataset.margin = String(m);
   paper.dataset.mode = settings.mode;
+  paper.dataset.validation = String(validation);
   paper.style.width = `${width}mm`;
   paper.style.height = `${height}mm`;
   paper.style.fontFamily = settings.fontFamily;
@@ -31,11 +36,17 @@ export function renderPaper(paper: HTMLElement, settings: FixtureSettings) {
   clip.append(rect); defs.append(clip); svg.append(defs);
   const grid = document.createElementNS(NS, 'g');
   grid.setAttribute('clip-path', 'url(#safe-grid-clip)');
-  grid.setAttribute('stroke', '#6B7280');
-  grid.setAttribute('stroke-opacity', '0.35');
-  grid.setAttribute('stroke-width', '0.1');
-  for (let x = m; x <= width-m; x += 5) grid.append(line(x, m, x, height-m));
-  for (let y = m; y <= height-m; y += 5) grid.append(line(m, y, width-m, y));
+  grid.setAttribute('data-grid-group', '');
+  grid.setAttribute('stroke', gridSettings.color);
+  grid.setAttribute('stroke-opacity', String(gridSettings.opacity));
+  grid.setAttribute('stroke-width', String(gridSettings.strokeMm));
+  for (const entry of gridLines({ orientation: settings.orientation, marginMm: m }, gridSettings)) {
+    const el = entry.axis === 'x' ? line(entry.positionMm, m, entry.positionMm, height-m) : line(m, entry.positionMm, width-m, entry.positionMm);
+    el.setAttribute('data-grid-line', entry.axis);
+    el.setAttribute('data-major', String(entry.major));
+    el.setAttribute('stroke-width', String(entry.strokeMm));
+    grid.append(el);
+  }
   svg.append(grid);
 
   // Deliberate U1-only calibration, also visible in the grid-only test case.
@@ -44,7 +55,7 @@ export function renderPaper(paper: HTMLElement, settings: FixtureSettings) {
   calibration.setAttribute('stroke-width', '0.25');
   calibration.setAttribute('stroke-linecap', 'butt');
   calibration.setAttribute('data-calibration', '100mm');
-  svg.append(calibration);
+  if (validation) svg.append(calibration);
   paper.append(svg);
 
   const textLayer = document.createElement('div');
@@ -56,7 +67,16 @@ export function renderPaper(paper: HTMLElement, settings: FixtureSettings) {
     Object.assign(el.style, { left: `${x}mm`, top: `${y}mm`, width: `${w}mm` });
     textLayer.append(el);
   };
-  addText('mixed', mixedText, m+5, m+24, 100);
-  addText('bottom', '하단 확인 · 마지막 줄 / Bottom edge', m+5, height-m-10, width-2*m-10);
+  if (validation) {
+    addText('mixed', mixedText, m+5, m+24, 100);
+    addText('bottom', '하단 확인 · 마지막 줄 / Bottom edge', m+5, height-m-10, width-2*m-10);
+  } else {
+    for (const item of settings.items ?? []) {
+      addText(item.id, item.text, item.xMm, item.yMm, item.widthMm);
+      const el = textLayer.lastElementChild as HTMLElement;
+      el.dataset.itemId = item.id;
+      Object.assign(el.style, { fontSize: `${item.fontSizePt}pt`, fontWeight: String(item.fontWeight), color: item.color, textAlign: item.align, lineHeight: String(item.lineHeight) });
+    }
+  }
   paper.append(textLayer);
 }
