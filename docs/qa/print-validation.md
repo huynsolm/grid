@@ -2,7 +2,27 @@
 
 기록일: 2026-10-20 / 재판정일: 2026-10-21 (Asia/Seoul)
 
-상태: **필수 17개 중 7개 수신·정량 통과**(Chrome 시스템 폰트·글씨 포함 6개, Edge 세로·여백 5mm 추정 1개). 나머지 10개와 사용자 육안·환경/설정 확인은 대기 중이다. **U1 미완료, U2 진입 금지**를 유지한다. 에이전트의 렌더링 확인만으로 사용자 육안 확인 및 전체 수용 검증을 완료 처리하지 않는다. 기존 기준의 실패 및 재판정 이력은 아래에 보존한다.
+상태: **기본 필수 17개 중 9개 수신: 정량 통과 8개, 실패 1개**. 새 Edge 가로·여백 0mm는 Chrome과 일치하지만, Edge 세로·여백 0mm는 2페이지로 분할되어 실패했다. 확장 조건을 발동해 해당 설정의 Edge 빈 모눈 1개를 추가 요구한다. Chrome 기본 미수신 8개, Edge 실패 사례 재저장과 추가 1개, 사용자 육안·환경/설정 확인이 대기 중이다. **U1 미완료, U2 진입 금지**를 유지한다.
+
+## Edge 대표 2개 수신 및 조건부 확장 — 2026-10-21
+
+사용자가 추가 저장한 아래 두 파일을 측정하고 전체 페이지를 렌더링해 확인했다. 원본은 덮어쓰지 않는다.
+
+| 파일 (`docs/qa/pdfs/u1/` 기준) | 페이지 수 | 용지/기준선 | Chrome 동일 설정 비교 | 판정 |
+| --- | --- | --- | --- | --- |
+| `edge-landscape-margin0-system-with-text-r1.pdf` | 1 | 297.010660×209.888653mm / 기준선 99.998317mm | MediaBox·기준선 끝점/길이·본문/하단 텍스트 및 추출 위치가 동일. 렌더링에서 하단 글자 잘림 없음 | 정량 통과, 사용자 육안·설정 확인 대기 |
+| `edge-portrait-margin0-system-with-text-r1.pdf` | 2 | 두 페이지 모두 A4 치수 허용 오차 이내. 첫 페이지 기준선 99.998317mm, 둘째에는 기준선 없음 | Chrome은 1페이지. Edge는 내용이 아래로 이동하고 하단 문구가 두 번째 페이지로 넘어감 | 실패(페이지 수·하단 문구 분리), 재저장 및 조건부 추가 사례 필요 |
+
+Edge 세로·여백 0mm의 첫 페이지 기준선 시작은 `(14.17298977, 61.77069861)`pt로, Chrome의 `(14.17298977, 34.02070000)`pt보다 y가 약 27.75pt(9.79mm) 아래다. 첫 페이지에는 혼합 문구가 있고 둘째 페이지에는 ‘하단 확인 · 마지막 줄 / Bottom edge’가 나온다. 따라서 빈 추가 페이지 문제가 아니라 실제 콘텐츠 분할이다. 브라우저 인쇄 여백 등 설정 차이는 확인할 후보지만 원인으로 확정하지 않는다. CSS 변경이나 기준 완화로 실패를 감추지 않는다.
+
+측정 JSON: `docs/qa/tmp/edge-portrait-margin0-system-with-text-r1.json`, `docs/qa/tmp/edge-landscape-margin0-system-with-text-r1.json`. 비교 기록: `docs/qa/tmp/edge-margin0-comparison.json`. 세로 전체 페이지 렌더링은 `docs/qa/tmp/edge-portrait-margin0-system-with-text-r1-page1.png`, `...-page2.png`다. 가로 렌더링은 같은 이름의 `.png`다. JSON에는 두 페이지 치수·회전·UserUnit·기준선 판정과 브라우저 메타데이터가 포함된다.
+
+**확장 조건 발동:** 세로·여백 0mm에서 Chrome과 페이지 수·위치·하단 출력 결과가 다르다. 다음을 사용자에게 요구하며 기존 r1은 보존한다.
+
+1. A4 세로·앱 안전 여백 0mm·글씨 포함, 인쇄 대화상자 여백 없음·100%·페이지 맞춤 해제·머리글/바닥글 해제를 확인해 `edge-portrait-margin0-system-with-text-r2.pdf`로 재저장한다. 가능하면 실제 대화상자 설정과 전체 브라우저/OS 버전을 함께 제공한다.
+2. 같은 방향·여백의 **추가 사례** `edge-portrait-margin0-system-grid-only-r1.pdf`를 저장해 텍스트 숨김 상태에서도 분할되는지 확인한다. 빈 모눈의 검증용 붉은 기준선은 유지한다.
+
+기본 필수 범위 17개를 일괄 확대하지 않고 해당 설정의 Edge 추가 1개만 요구한다. r2는 기존 실패 사례의 재시도이며 새로운 기본 사례로 세지 않는다. 이후 차이가 남으면 같은 방향·여백에서 필요한 추가 사례를 구체적으로 기록한다. 현재는 기본 미수신 Chrome 8개와 추가 미수신 Edge 1개가 남았고, 별도로 Edge 실패 사례 r2가 필요하다. 이 차이가 해결되기 전에는 U1 통과로 처리하지 않는다.
 
 ## 추가 수신 검증 — 2026-10-21
 
@@ -18,9 +38,9 @@
 
 각 파일의 JSON과 렌더링 이미지는 `docs/qa/tmp/{PDF 파일명에서 .pdf를 제외한 이름}.json` 및 `.png`에 기록했다. 종합 측정 목록은 `docs/qa/tmp/u1-current-summary.json`이다. 파일별 MediaBox·회전·UserUnit·기준선 끝점·허용값·메타데이터를 JSON에 보존했다. 추가 5개의 이미지를 직접 확인했으며 한글/영문·빈 줄·하단 글자가 정상 표시되고 글자 깨짐·UI/경고 인쇄·빈 추가 페이지는 관찰되지 않았다. 여백 0mm의 외곽 모눈은 용지 경계로 클리핑되며 실제 무테 인쇄 가능 여부는 별도다. 사용자 육안 확인·정확한 폰트/OS·인쇄 설정·취소 후 화면 유지는 아직 미확인이다.
 
-### 사용자가 추가로 저장할 파일 — 10개
+### 사용자가 추가로 저장할 파일 — 현재 10건
 
-모두 `docs/qa/pdfs/u1/`에 저장한다. A4·해당 방향·100%·여백 없음·페이지 맞춤 해제·머리글/바닥글 해제를 유지한다. 모눈 간격은 현재 검증 페이지의 5mm다.
+기본 미수신 Chrome 8개 + 조건부 추가 Edge 1개 + 실패 사례 재시도 1개다. 모두 `docs/qa/pdfs/u1/`에 저장한다. A4·해당 방향·100%·여백 없음·페이지 맞춤 해제·머리글/바닥글 해제를 유지한다. 모눈 간격은 현재 검증 페이지의 5mm다.
 
 | 브라우저 | 설정 | 파일명 |
 | --- | --- | --- |
@@ -32,10 +52,10 @@
 | Chrome | 가로·여백 20mm·빈 모눈 | `chrome-landscape-margin20-system-grid-only-r1.pdf` |
 | Chrome | 세로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-portrait-margin5-upload-with-text-r1.pdf` |
 | Chrome | 가로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-landscape-margin5-upload-with-text-r1.pdf` |
-| Edge | 세로·여백 0mm·시스템 폰트·글씨 포함 | `edge-portrait-margin0-system-with-text-r1.pdf` |
-| Edge | 가로·여백 0mm·시스템 폰트·글씨 포함 | `edge-landscape-margin0-system-with-text-r1.pdf` |
+| Edge | 세로·여백 0mm·글씨 포함 재시도(기존 r1 보존) | `edge-portrait-margin0-system-with-text-r2.pdf` |
+| Edge | 세로·여백 0mm·빈 모눈(조건부 추가) | `edge-portrait-margin0-system-grid-only-r1.pdf` |
 
-업로드 2개는 이용 권한과 한글 지원을 확인한 같은 로컬 폰트 파일로 저장하고 파일명·버전·권한 확인을 함께 기록한다. 빈 모눈 PDF에는 검증 전용 붉은 기준선은 남고 본문/하단 글자는 없어야 한다. Edge의 0mm 사례가 아직 없으므로 해당 Chrome 사례와의 비교·조건부 추가 요구 여부는 미판정이다. 파일 수신과 별개로 사용자 육안·브라우저/OS 전체 버전·인쇄 설정 확인이 필요하다.
+업로드 2개는 이용 권한과 한글 지원을 확인한 같은 로컬 폰트 파일로 저장하고 파일명·버전·권한 확인을 함께 기록한다. 빈 모눈 PDF에는 검증 전용 붉은 기준선은 남고 본문/하단 글자는 없어야 한다. Edge의 0mm 가로는 Chrome과 일치하고 세로는 2페이지 분할 차이로 조건부 추가 요구가 발동됐다. 파일 수신과 별개로 사용자 육안·브라우저/OS 전체 버전·인쇄 설정 확인이 필요하다.
 
 ## Edge 검증 범위 변경 이력 — 2026-10-21
 
@@ -116,10 +136,15 @@ U6도 16개 조합 전체는 Chrome에서, Edge는 동일한 대표 3개를 완�
 | Chrome | system-grid-only | 세로·가로 | 0·5·20 | 6 | 미제공 | 미검증 |
 | Chrome | upload-with-text | 세로·가로 | 5 | 2 | 미제공 | 미검증 |
 | Edge | system-with-text | 세로 | 5(추정) | 1 | `edge-portrait-margin5-system-with-text-r1.pdf` 수신 | 정량 통과, 육안・설정 확인 대기 |
-| Edge | system-with-text | 세로 | 0 | 1 | `edge-portrait-margin0-system-with-text-r1.pdf` 미제공 | 미검증 |
-| Edge | system-with-text | 가로 | 0 | 1 | `edge-landscape-margin0-system-with-text-r1.pdf` 미제공 | 미검증 |
+| Edge | system-with-text | 세로 | 0 | 1 | `edge-portrait-margin0-system-with-text-r1.pdf` 수신 | 실패: 2페이지·하단 문구 분리, r2 대기 |
+| Edge | system-with-text | 가로 | 0 | 1 | `edge-landscape-margin0-system-with-text-r1.pdf` 수신 | 정량 통과·Chrome과 일치, 사용자 육안·설정 확인 대기 |
 
-위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 수신한 Chrome·Edge 7개 파일의 정량 통과만으로 U1 전체 통과를 뜻하지 않는다. Edge 추가 검증이 요구되면 이 표에 기본 필수와 구분해 사례·파일명·상태를 추가한다.
+위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 기본 필수 9개 수신 중 8개 정량 통과·1개 실패이며 U1 전체 통과를 뜻하지 않는다. 조건부 추가는 아래 별도 표로 관리하고 기본 필수 17개에 섞어 세지 않는다.
+
+| 구분 | 방향·여백 | 파일 | 상태 |
+| --- | --- | --- | --- |
+| Edge 조건부 추가 | 세로·0mm·빈 모눈 | `edge-portrait-margin0-system-grid-only-r1.pdf` | 미제공·미검증 |
+| Edge 기존 실패 사례 재시도 | 세로·0mm·글씨 포함 | `edge-portrait-margin0-system-with-text-r2.pdf` | 미제공·재판정 대기 |
 
 ## 정량 측정 절차
 
@@ -137,7 +162,7 @@ python scripts/qa/measure_pdf.py docs/qa/pdfs/u1/chrome-portrait-margin5-system-
 
 ### 사례별 기록 양식
 
-사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 기존 두 수신 결과의 재판정과 추가 5개 결과는 위에 기록했으며 나머지 10개 사례는 대기 중이다.
+사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 기존 두 수신 결과의 재판정·Chrome 추가 5개·Edge 추가 2개 결과는 위에 기록했다. 현재 기본 미수신 8개·조건부 추가 1개와 실패 사례 재시도 1개는 대기 중이다.
 
 - 사례 id / 재검증 번호 / PDF 상대 경로 / 사용자 수행 확인:
 - 브라우저 전체 버전 / OS 버전 / 환경 id:
