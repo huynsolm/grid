@@ -2,7 +2,40 @@
 
 기록일: 2026-10-20 / 재판정일: 2026-10-21 (Asia/Seoul)
 
-상태: **Chrome·Edge 수신 파일 각각 정량 통과, 육안 확인 및 나머지 필수 사례 대기**. U1은 미완료이며 **U2 진입 금지**를 유지한다. 2026-10-21 기준 변경 후 두 파일을 재판정했다. 기존 0.1mm 용지 치수 기준의 실패 기록은 아래 이력에 보존한다. 전체 인쇄 설정·여백 5mm(추정)의 사용자 확인과 Chrome 나머지 필수 사례(가로·여백 0/20mm·빈 모눈·업로드 폰트 등), Edge 여백 0mm의 세로·가로 대표 사례 검증은 계속 대기한다. 에이전트의 렌더링 확인만으로 사용자 육안 확인 및 전체 수용 검증을 완료 처리하지 않는다.
+상태: **필수 17개 중 7개 수신·정량 통과**(Chrome 시스템 폰트·글씨 포함 6개, Edge 세로·여백 5mm 추정 1개). 나머지 10개와 사용자 육안·환경/설정 확인은 대기 중이다. **U1 미완료, U2 진입 금지**를 유지한다. 에이전트의 렌더링 확인만으로 사용자 육안 확인 및 전체 수용 검증을 완료 처리하지 않는다. 기존 기준의 실패 및 재판정 이력은 아래에 보존한다.
+
+## 추가 수신 검증 — 2026-10-21
+
+검증 폴더에서 Chrome 시스템 폰트·글씨 포함 PDF 5개를 추가로 확인했다. 기존 2개와 함께 7개 전체를 현 기준(용지 축별 오차 0.2mm, 기준선 오차 0.1mm, 페이지 수 1)으로 재측정했으며 모두 정량 통과했다. Chrome 메타데이터를 확인했고 추가 5개 모두 Edg 표시는 없다. 여백과 설정명은 파일명·기준선 위치와 부합하지만 사용자 인쇄 설정 확인은 대기 중이다.
+
+| 추가 파일 (`docs/qa/pdfs/u1/` 기준) | 페이지 수 | 용지 치수 mm | 100mm 기준선 mm | 정량 판정 |
+| --- | --- | --- | --- | --- |
+| `chrome-portrait-margin0-system-with-text-r1.pdf` | 1 | 209.888653 × 297.010660 | 99.998317 | 통과 |
+| `chrome-portrait-margin20-system-with-text-r1.pdf` | 1 | 209.888653 × 297.010660 | 99.998317 | 통과 |
+| `chrome-landscape-margin0-system-with-text-r1.pdf` | 1 | 297.010660 × 209.888653 | 99.998317 | 통과 |
+| `chrome-landscape-margin5-system-with-text-r1.pdf` | 1 | 297.010660 × 209.888653 | 99.998317 | 통과 |
+| `chrome-landscape-margin20-system-with-text-r1.pdf` | 1 | 297.010660 × 209.888653 | 99.998317 | 통과 |
+
+각 파일의 JSON과 렌더링 이미지는 `docs/qa/tmp/{PDF 파일명에서 .pdf를 제외한 이름}.json` 및 `.png`에 기록했다. 종합 측정 목록은 `docs/qa/tmp/u1-current-summary.json`이다. 파일별 MediaBox·회전·UserUnit·기준선 끝점·허용값·메타데이터를 JSON에 보존했다. 추가 5개의 이미지를 직접 확인했으며 한글/영문·빈 줄·하단 글자가 정상 표시되고 글자 깨짐·UI/경고 인쇄·빈 추가 페이지는 관찰되지 않았다. 여백 0mm의 외곽 모눈은 용지 경계로 클리핑되며 실제 무테 인쇄 가능 여부는 별도다. 사용자 육안 확인·정확한 폰트/OS·인쇄 설정·취소 후 화면 유지는 아직 미확인이다.
+
+### 사용자가 추가로 저장할 파일 — 10개
+
+모두 `docs/qa/pdfs/u1/`에 저장한다. A4·해당 방향·100%·여백 없음·페이지 맞춤 해제·머리글/바닥글 해제를 유지한다. 모눈 간격은 현재 검증 페이지의 5mm다.
+
+| 브라우저 | 설정 | 파일명 |
+| --- | --- | --- |
+| Chrome | 세로·여백 0mm·빈 모눈 | `chrome-portrait-margin0-system-grid-only-r1.pdf` |
+| Chrome | 세로·여백 5mm·빈 모눈 | `chrome-portrait-margin5-system-grid-only-r1.pdf` |
+| Chrome | 세로·여백 20mm·빈 모눈 | `chrome-portrait-margin20-system-grid-only-r1.pdf` |
+| Chrome | 가로·여백 0mm·빈 모눈 | `chrome-landscape-margin0-system-grid-only-r1.pdf` |
+| Chrome | 가로·여백 5mm·빈 모눈 | `chrome-landscape-margin5-system-grid-only-r1.pdf` |
+| Chrome | 가로·여백 20mm·빈 모눈 | `chrome-landscape-margin20-system-grid-only-r1.pdf` |
+| Chrome | 세로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-portrait-margin5-upload-with-text-r1.pdf` |
+| Chrome | 가로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-landscape-margin5-upload-with-text-r1.pdf` |
+| Edge | 세로·여백 0mm·시스템 폰트·글씨 포함 | `edge-portrait-margin0-system-with-text-r1.pdf` |
+| Edge | 가로·여백 0mm·시스템 폰트·글씨 포함 | `edge-landscape-margin0-system-with-text-r1.pdf` |
+
+업로드 2개는 이용 권한과 한글 지원을 확인한 같은 로컬 폰트 파일로 저장하고 파일명·버전·권한 확인을 함께 기록한다. 빈 모눈 PDF에는 검증 전용 붉은 기준선은 남고 본문/하단 글자는 없어야 한다. Edge의 0mm 사례가 아직 없으므로 해당 Chrome 사례와의 비교·조건부 추가 요구 여부는 미판정이다. 파일 수신과 별개로 사용자 육안·브라우저/OS 전체 버전·인쇄 설정 확인이 필요하다.
 
 ## Edge 검증 범위 변경 이력 — 2026-10-21
 
@@ -79,14 +112,14 @@ U6도 16개 조합 전체는 Chrome에서, Edge는 동일한 대표 3개를 완�
 
 | 브라우저 | 폰트/모드 | 방향 | 여백 mm | 사례 수 | 사용자 PDF | 정량/육안 |
 | --- | --- | --- | --- | --- | --- | --- |
-| Chrome | system-with-text | 세로·가로 | 0·5·20 | 6 | 세로·5mm(추정) 1개 수신, 5개 대기 | 수신 1개 정량 통과, 육안 확인 및 나머지 사례 대기 |
+| Chrome | system-with-text | 세로·가로 | 0·5·20 | 6 | 6개 모두 수신 | 6개 정량 통과·에이전트 렌더링 확인, 사용자 육안·설정 확인 대기 |
 | Chrome | system-grid-only | 세로·가로 | 0·5·20 | 6 | 미제공 | 미검증 |
 | Chrome | upload-with-text | 세로·가로 | 5 | 2 | 미제공 | 미검증 |
 | Edge | system-with-text | 세로 | 5(추정) | 1 | `edge-portrait-margin5-system-with-text-r1.pdf` 수신 | 정량 통과, 육안・설정 확인 대기 |
 | Edge | system-with-text | 세로 | 0 | 1 | `edge-portrait-margin0-system-with-text-r1.pdf` 미제공 | 미검증 |
 | Edge | system-with-text | 가로 | 0 | 1 | `edge-landscape-margin0-system-with-text-r1.pdf` 미제공 | 미검증 |
 
-위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 수신한 Chrome·Edge 2개 파일의 정량 통과만으로 U1 전체 통과를 뜻하지 않는다. Edge 추가 검증이 요구되면 이 표에 기본 필수와 구분해 사례·파일명·상태를 추가한다.
+위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 수신한 Chrome·Edge 7개 파일의 정량 통과만으로 U1 전체 통과를 뜻하지 않는다. Edge 추가 검증이 요구되면 이 표에 기본 필수와 구분해 사례·파일명·상태를 추가한다.
 
 ## 정량 측정 절차
 
@@ -104,7 +137,7 @@ python scripts/qa/measure_pdf.py docs/qa/pdfs/u1/chrome-portrait-margin5-system-
 
 ### 사례별 기록 양식
 
-사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 두 수신 결과의 기준 변경 후 재판정은 위에 기록했으며 나머지 사례는 대기 중이다.
+사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 기존 두 수신 결과의 재판정과 추가 5개 결과는 위에 기록했으며 나머지 10개 사례는 대기 중이다.
 
 - 사례 id / 재검증 번호 / PDF 상대 경로 / 사용자 수행 확인:
 - 브라우저 전체 버전 / OS 버전 / 환경 id:
