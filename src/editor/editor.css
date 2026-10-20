@@ -1,0 +1,119 @@
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+.workspace.has-editor {
+  grid-template-columns: 280px minmax(0, 1fr) 280px;
+}
+.text-inspector {
+  padding: 26px 20px;
+  background: #f7f8f4;
+  border-left: 1px solid #ced7d0;
+  min-width: 0;
+}
+.text-inspector h2 {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+.text-inspector fieldset {
+  border: 0;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 13px;
+  min-width: 0;
+}
+.text-inspector input,
+.text-inspector textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #bdc9c1;
+  border-radius: 5px;
+  background: white;
+  color: #24342f;
+  font: inherit;
+}
+.text-inspector input[readonly] {
+  font-size: 11px;
+  background: #eff2ed;
+}
+.text-inspector fieldset:disabled {
+  opacity: 0.5;
+}
+.text-inspector textarea {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  resize: vertical;
+}
+.editor-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.has-editor .print-page {
+  position: relative;
+}
+.selection-frame {
+  position: absolute;
+  outline: 1px solid #245b45;
+  pointer-events: none;
+}
+.resize-handle {
+  position: absolute;
+  right: -6px;
+  top: calc(50% - 8px);
+  width: 12px;
+  height: 16px;
+  border: 1px solid white;
+  border-radius: 2px;
+  padding: 0;
+  background: #245b45;
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+.editor-textarea {
+  position: absolute;
+  margin: 0;
+  border-radius: 0;
+  outline: 1px dashed #245b45;
+  resize: none;
+  overflow: hidden;
+  background: #fff;
+  pointer-events: auto;
+}
+.paper[data-validation='false'] .paper-text {
+  cursor: move;
+  touch-action: none;
+}
+.paper[data-validation='false'] .paper-text[data-trailing-newline='true']::after {
+  content: '\200b';
+}
+.paper[data-validation='false'] .grid-layer {
+  pointer-events: none;
+}
+.editor-readiness {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 0 0 12px;
+  color: #52665a;
+}
+.editor-warning {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #9d2929;
+  margin: 0 0 14px;
+}
+@media (max-width: 1100px) {
+  .workspace.has-editor {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+  .text-inspector {
+    grid-column: 1 / -1;
+    border-top: 1px solid #ced7d0;
+  }
+  .text-inspector fieldset {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

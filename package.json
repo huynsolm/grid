@@ -8,10 +8,12 @@
     "build": "tsc --noEmit && vite build",
     "test": "playwright test",
     "test:qa": "python -m unittest discover -s tests/qa -v",
-    "test:unit": "vitest run tests/unit"
+    "test:unit": "vitest run tests/unit",
+    "check:format:u3": "prettier --check src/editor src/ui/text-panel.ts src/state/app-document.ts src/main.ts src/paper/render.ts tests/unit/snap.test.ts tests/unit/measure.test.ts tests/unit/edit-session.test.ts tests/browser/text-editing.spec.ts tests/browser/geometry.spec.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
+    "prettier": "3.9.10",
     "typescript": "7.0.2",
     "vite": "8.3.4",
     "vitest": "5.0.5"
