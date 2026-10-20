@@ -2,7 +2,26 @@
 
 기록일: 2026-10-20 / 재판정일: 2026-10-21 (Asia/Seoul)
 
-상태: **기본 필수 17개 중 9개 사례 정량 통과**(Chrome 6개, Edge 대표 3개). Edge 세로·여백 0mm는 r3에서 세로 A4 1페이지로 정상 출력됐으며 Chrome의 측정값·텍스트 위치와 일치한다. r1·r2의 실패 기록은 보존한다. 기본 미수신 Chrome 8개와 기존 확장 조건으로 요구한 Edge 빈 모눈 1개, 사용자 육안·환경/설정 확인은 대기 중이다. **U1 미완료, U2 진입 금지**를 유지한다.
+상태: **기본 필수 17개 중 15개 사례 파일 수신: 최신 결과 기준 정량/내용 통과 9개, 빈 모눈 내용 검증 실패 6개**. 빈 모눈 이름의 신규 Chrome 6개 모두 본문이 포함되어 해당 출력 모드로 통과할 수 없다. 이 중 가로·여백 20mm 파일은 실제 세로 방향으로 치수 판정도 실패했다. Chrome 업로드 폰트 2개와 조건부 추가 Edge 빈 모눈 1개는 미제공이다. 사용자 육안·환경/설정 확인도 대기 중이며 **U1 미완료, U2 진입 금지**를 유지한다.
+
+## Chrome 빈 모눈 이름 파일 6개 수신 — 2026-10-21
+
+신규 `system-grid-only-r1.pdf` 6개를 검사했다. 모든 파일에서 ‘한글과 English’ 본문과 하단 문구가 추출되어 **빈 모눈 내용 검증은 6개 모두 실패**다. 세로·여백 5mm 파일을 렌더링해 실제로 글자가 보이는 것도 확인했다. PDF 이름만으로 모드를 판정하지 않는다.
+
+| 사례(Chrome) | 페이지 수 | 치수·기준선 정량 | 텍스트 숨김 | 사례 판정 |
+| --- | --- | --- | --- | --- |
+| 세로·0mm | 1 | 통과 | 본문/하단 포함 | 실패 |
+| 세로·5mm | 1 | 통과 | 본문/하단 포함 | 실패 |
+| 세로·20mm | 1 | 통과 | 본문/하단 포함 | 실패 |
+| 가로·0mm | 1 | 통과 | 본문/하단 포함 | 실패 |
+| 가로·5mm | 1 | 통과 | 본문/하단 포함 | 실패 |
+| 가로·20mm | 1 | 실패: 실제 세로 209.888653×297.010660mm. 기준선은 통과 | 본문/하단 포함 | 실패(방향·출력 모드) |
+
+세로 0mm/20mm 원본 파일명 앞에는 백틱 문자도 붙어 있다. 파일은 변경하지 않고 보존했으며 정확한 원본 경로는 개별 JSON의 file 필드에 기록했다. JSON 이름에서는 선행 백틱을 제외해 `docs/qa/tmp/{정규 사례명}-r1.json`으로 관리한다. 종합 결과는 `docs/qa/tmp/grid-only-received-summary.json`, 렌더링 증거는 `docs/qa/tmp/chrome-portrait-margin5-system-grid-only-r1.png`다. JSON의 status는 정량 판정이며 content_check와 overall_case_status는 본문 포함 실패를 별도로 표시한다.
+
+현재 실행 중인 검증 페이지를 Chrome에서 별도로 열어 출력 모드를 ‘빈 모눈’으로 바꾸고 확인했다. 화면과 print 매체 모두 text-layer의 visibility가 hidden이다. 이 자동 확인은 사용자가 실제 저장한 PDF의 검증을 대신하지 않는다. 이 결과만으로 사용자 조작 또는 브라우저 설정 중 어느 것이 원인이라고 단정하지 않는다. 앱 코드와 설계서는 수정하지 않았다.
+
+**다음은 한 파일부터 재확인:** Chrome에서 앱의 방향 ‘세로’, 안전 여백 ‘5mm’, **출력 모드 ‘빈 모눈’**을 선택한다. 미리보기에서 본문과 하단 글자가 사라지고 모눈과 붉은 기준선만 남는지 확인한 뒤 앱 출력 버튼을 눌러 `chrome-portrait-margin5-system-grid-only-r2.pdf`로 저장한다. 파일명만 바꾸는 것은 출력 모드를 변경하지 않는다. 해당 파일 확인 후 나머지 5개도 정확한 방향·여백·빈 모눈으로 재저장한다. 기존 r1은 유지하며 파일명 앞에 백틱은 넣지 않는다.
 
 ## Edge 세로 재시도 r3 통과 — 2026-10-21
 
@@ -56,16 +75,16 @@ Edge 세로·여백 0mm의 첫 페이지 기준선 시작은 `(14.17298977, 61.7
 
 ### 사용자가 추가로 저장할 파일 — 현재 9개
 
-기본 미수신 Chrome 8개 + 조건부 추가 Edge 1개다. Edge 글씨 포함 재시도 r3는 통과해 더 이상 재저장 대기가 아니다. 모두 `docs/qa/pdfs/u1/`에 저장한다. A4·해당 방향·100%·여백 없음·페이지 맞춤 해제·머리글/바닥글 해제를 유지한다. 모눈 간격은 현재 검증 페이지의 5mm다.
+Chrome 빈 모눈 재시도 6개 + 기본 미수신 Chrome 업로드 폰트 2개 + 조건부 추가 Edge 1개다. 우선 세로·5mm·빈 모눈 r2 하나를 확인한 뒤 나머지를 저장한다. Edge 글씨 포함 재시도 r3는 통과해 더 이상 재저장 대기가 아니다. 모두 `docs/qa/pdfs/u1/`에 저장한다. A4·해당 방향·100%·여백 없음·페이지 맞춤 해제·머리글/바닥글 해제를 유지한다. 모눈 간격은 현재 검증 페이지의 5mm다.
 
 | 브라우저 | 설정 | 파일명 |
 | --- | --- | --- |
-| Chrome | 세로·여백 0mm·빈 모눈 | `chrome-portrait-margin0-system-grid-only-r1.pdf` |
-| Chrome | 세로·여백 5mm·빈 모눈 | `chrome-portrait-margin5-system-grid-only-r1.pdf` |
-| Chrome | 세로·여백 20mm·빈 모눈 | `chrome-portrait-margin20-system-grid-only-r1.pdf` |
-| Chrome | 가로·여백 0mm·빈 모눈 | `chrome-landscape-margin0-system-grid-only-r1.pdf` |
-| Chrome | 가로·여백 5mm·빈 모눈 | `chrome-landscape-margin5-system-grid-only-r1.pdf` |
-| Chrome | 가로·여백 20mm·빈 모눈 | `chrome-landscape-margin20-system-grid-only-r1.pdf` |
+| Chrome | 세로·여백 0mm·빈 모눈 | `chrome-portrait-margin0-system-grid-only-r2.pdf` |
+| Chrome | 세로·여백 5mm·빈 모눈 | `chrome-portrait-margin5-system-grid-only-r2.pdf` |
+| Chrome | 세로·여백 20mm·빈 모눈 | `chrome-portrait-margin20-system-grid-only-r2.pdf` |
+| Chrome | 가로·여백 0mm·빈 모눈 | `chrome-landscape-margin0-system-grid-only-r2.pdf` |
+| Chrome | 가로·여백 5mm·빈 모눈 | `chrome-landscape-margin5-system-grid-only-r2.pdf` |
+| Chrome | 가로·여백 20mm·빈 모눈 | `chrome-landscape-margin20-system-grid-only-r2.pdf` |
 | Chrome | 세로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-portrait-margin5-upload-with-text-r1.pdf` |
 | Chrome | 가로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-landscape-margin5-upload-with-text-r1.pdf` |
 | Edge | 세로·여백 0mm·빈 모눈(조건부 추가) | `edge-portrait-margin0-system-grid-only-r1.pdf` |
@@ -148,13 +167,13 @@ U6도 16개 조합 전체는 Chrome에서, Edge는 동일한 대표 3개를 완�
 | 브라우저 | 폰트/모드 | 방향 | 여백 mm | 사례 수 | 사용자 PDF | 정량/육안 |
 | --- | --- | --- | --- | --- | --- | --- |
 | Chrome | system-with-text | 세로·가로 | 0·5·20 | 6 | 6개 모두 수신 | 6개 정량 통과·에이전트 렌더링 확인, 사용자 육안·설정 확인 대기 |
-| Chrome | system-grid-only | 세로·가로 | 0·5·20 | 6 | 미제공 | 미검증 |
+| Chrome | system-grid-only | 세로·가로 | 0·5·20 | 6 | 6개 수신 | 모두 본문 포함으로 실패. 가로·20mm는 실제 세로 방향. r2 재저장 대기 |
 | Chrome | upload-with-text | 세로·가로 | 5 | 2 | 미제공 | 미검증 |
 | Edge | system-with-text | 세로 | 5(추정) | 1 | `edge-portrait-margin5-system-with-text-r1.pdf` 수신 | 정량 통과, 육안・설정 확인 대기 |
 | Edge | system-with-text | 세로 | 0 | 1 | r1·r2·r3 수신 | r3 정량 통과·Chrome과 일치, 사용자 육안·설정 확인 대기. r1·r2 실패 이력 보존 |
 | Edge | system-with-text | 가로 | 0 | 1 | `edge-landscape-margin0-system-with-text-r1.pdf` 수신 | 정량 통과·Chrome과 일치, 사용자 육안·설정 확인 대기 |
 
-위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 기본 필수 9개 사례는 최신 결과 기준 모두 정량 통과이며 U1 전체 통과를 뜻하지 않는다. 조건부 추가는 아래 별도 표로 관리하고 기본 필수 17개에 섞어 세지 않는다.
+위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 기본 필수 15개 사례 파일을 받았으나 9개만 최신 결과 기준 정량/내용 검사를 통과했고 신규 빈 모눈 6개는 내용 검증 실패다. U1 전체 통과를 뜻하지 않는다. 조건부 추가는 아래 별도 표로 관리하고 기본 필수 17개에 섞어 세지 않는다.
 
 | 구분 | 방향·여백 | 파일 | 상태 |
 | --- | --- | --- | --- |
@@ -177,7 +196,7 @@ python scripts/qa/measure_pdf.py docs/qa/pdfs/u1/chrome-portrait-margin5-system-
 
 ### 사례별 기록 양식
 
-사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 기존 두 수신 결과의 재판정·Chrome 추가 5개·Edge 추가 2개 및 세로 r2/r3 결과는 위에 기록했다. 현재 기본 미수신 8개·조건부 추가 1개는 대기 중이며 세로 재시도는 r3에서 정량 통과했다.
+사용자 결과를 받은 뒤 파일마다 아래 항목을 추가한다. 기존 두 수신 결과의 재판정·Chrome 추가 5개·Edge 추가 2개 및 세로 r2/r3 결과는 위에 기록했다. 현재 기본 미수신은 Chrome 업로드 폰트 2개이며 조건부 추가 Edge 1개와 Chrome 빈 모눈 재시도 6개가 대기 중이다. Edge 세로 글씨 포함 재시도는 r3에서 정량 통과했다.
 
 - 사례 id / 재검증 번호 / PDF 상대 경로 / 사용자 수행 확인:
 - 브라우저 전체 버전 / OS 버전 / 환경 id:
