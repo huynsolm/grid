@@ -4,6 +4,14 @@
 
 상태: **기본 필수 17개 중 9개 수신: 정량 통과 8개, 실패 1개**. 새 Edge 가로·여백 0mm는 Chrome과 일치하지만, Edge 세로·여백 0mm는 2페이지로 분할되어 실패했다. 확장 조건을 발동해 해당 설정의 Edge 빈 모눈 1개를 추가 요구한다. Chrome 기본 미수신 8개, Edge 실패 사례 재저장과 추가 1개, 사용자 육안·환경/설정 확인이 대기 중이다. **U1 미완료, U2 진입 금지**를 유지한다.
 
+## Edge 세로 재시도 r2 확인 — 2026-10-21
+
+`docs/qa/pdfs/u1/edge-portrait-margin0-system-with-text-r2.pdf`를 수신했다. 페이지 수는 1이고 기준선은 99.998317mm(오차 0.001683mm)지만 MediaBox는 `[0, 0, 841.91998, 594.95996]`pt, 회전 0도로 **297.010660×209.888653mm의 가로 A4**다. 이름의 portrait와 실제 방향이 달라 세로 사례로는 정량 실패다. 하단 문구가 한 페이지에 보이지만 원래 세로 분할 문제가 해결됐다고 판정할 수 없다.
+
+렌더링에서도 가로 용지임을 확인했다. 기존 Edge 가로 r1과 해시는 다르므로 같은 파일의 단순 복사라고 단정하지 않는다. 화면 용지 방향이나 인쇄 대화상자 설정 중 무엇이 원인인지는 아직 미확인이다. JSON과 렌더링은 `docs/qa/tmp/edge-portrait-margin0-system-with-text-r2.json`, `.png`, 비교 결과는 `docs/qa/tmp/edge-portrait-margin0-r2-comparison.json`에 보존했다.
+
+r1·r2는 보존하고, **앱의 용지 방향을 세로로 바꾼 뒤** 인쇄 대화상자도 A4 세로·100%·여백 없음·머리글/바닥글 해제로 확인해 `edge-portrait-margin0-system-with-text-r3.pdf`를 요청한다. 추가 빈 모눈 `edge-portrait-margin0-system-grid-only-r1.pdf`도 동일한 세로 설정으로 대기 중이다. 기본 사례 수는 늘리지 않으며 r2는 재시도 파일로만 관리한다. U1 미완료·U2 진입 금지를 유지한다.
+
 ## Edge 대표 2개 수신 및 조건부 확장 — 2026-10-21
 
 사용자가 추가 저장한 아래 두 파일을 측정하고 전체 페이지를 렌더링해 확인했다. 원본은 덮어쓰지 않는다.
@@ -52,7 +60,7 @@ Edge 세로·여백 0mm의 첫 페이지 기준선 시작은 `(14.17298977, 61.7
 | Chrome | 가로·여백 20mm·빈 모눈 | `chrome-landscape-margin20-system-grid-only-r1.pdf` |
 | Chrome | 세로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-portrait-margin5-upload-with-text-r1.pdf` |
 | Chrome | 가로·여백 5mm·업로드 폰트·글씨 포함 | `chrome-landscape-margin5-upload-with-text-r1.pdf` |
-| Edge | 세로·여백 0mm·글씨 포함 재시도(기존 r1 보존) | `edge-portrait-margin0-system-with-text-r2.pdf` |
+| Edge | 세로·여백 0mm·글씨 포함 재시도(r1·r2 보존) | `edge-portrait-margin0-system-with-text-r3.pdf` |
 | Edge | 세로·여백 0mm·빈 모눈(조건부 추가) | `edge-portrait-margin0-system-grid-only-r1.pdf` |
 
 업로드 2개는 이용 권한과 한글 지원을 확인한 같은 로컬 폰트 파일로 저장하고 파일명·버전·권한 확인을 함께 기록한다. 빈 모눈 PDF에는 검증 전용 붉은 기준선은 남고 본문/하단 글자는 없어야 한다. Edge의 0mm 가로는 Chrome과 일치하고 세로는 2페이지 분할 차이로 조건부 추가 요구가 발동됐다. 파일 수신과 별개로 사용자 육안·브라우저/OS 전체 버전·인쇄 설정 확인이 필요하다.
@@ -136,7 +144,7 @@ U6도 16개 조합 전체는 Chrome에서, Edge는 동일한 대표 3개를 완�
 | Chrome | system-grid-only | 세로·가로 | 0·5·20 | 6 | 미제공 | 미검증 |
 | Chrome | upload-with-text | 세로·가로 | 5 | 2 | 미제공 | 미검증 |
 | Edge | system-with-text | 세로 | 5(추정) | 1 | `edge-portrait-margin5-system-with-text-r1.pdf` 수신 | 정량 통과, 육안・설정 확인 대기 |
-| Edge | system-with-text | 세로 | 0 | 1 | `edge-portrait-margin0-system-with-text-r1.pdf` 수신 | 실패: 2페이지·하단 문구 분리, r2 대기 |
+| Edge | system-with-text | 세로 | 0 | 1 | r1·r2 수신 | r1은 2페이지 분할, r2는 가로 방향 불일치. 세로 r3 대기 |
 | Edge | system-with-text | 가로 | 0 | 1 | `edge-landscape-margin0-system-with-text-r1.pdf` 수신 | 정량 통과·Chrome과 일치, 사용자 육안·설정 확인 대기 |
 
 위 파일은 `docs/qa/pdfs/u1/`에 저장한다. 기본 필수 9개 수신 중 8개 정량 통과·1개 실패이며 U1 전체 통과를 뜻하지 않는다. 조건부 추가는 아래 별도 표로 관리하고 기본 필수 17개에 섞어 세지 않는다.
@@ -144,7 +152,7 @@ U6도 16개 조합 전체는 Chrome에서, Edge는 동일한 대표 3개를 완�
 | 구분 | 방향·여백 | 파일 | 상태 |
 | --- | --- | --- | --- |
 | Edge 조건부 추가 | 세로·0mm·빈 모눈 | `edge-portrait-margin0-system-grid-only-r1.pdf` | 미제공·미검증 |
-| Edge 기존 실패 사례 재시도 | 세로·0mm·글씨 포함 | `edge-portrait-margin0-system-with-text-r2.pdf` | 미제공·재판정 대기 |
+| Edge 기존 실패 사례 재시도 | 세로·0mm·글씨 포함 | `edge-portrait-margin0-system-with-text-r3.pdf` | 미제공·재판정 대기(r2 가로 방향 불일치) |
 
 ## 정량 측정 절차
 
