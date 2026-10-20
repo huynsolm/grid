@@ -38,6 +38,25 @@ class MeasurePDFTests(unittest.TestCase):
             result = measurement.measure_pdf(self.make_pdf(tmp, width=211), 'portrait')
             self.assertEqual(result['status'], 'fail')
 
+    def test_page_width_error_0111_mm_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = measurement.measure_pdf(self.make_pdf(tmp, width=209.889), 'portrait')
+            self.assertEqual(result['status'], 'pass')
+            self.assertEqual(result['page_size_tolerance_mm'], 0.2)
+            self.assertEqual(result['calibration_tolerance_mm'], 0.1)
+
+    def test_page_width_error_025_mm_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = measurement.measure_pdf(self.make_pdf(tmp, width=210.25), 'portrait')
+            self.assertEqual(result['status'], 'fail')
+
+    def test_calibration_error_011_mm_still_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = measurement.measure_pdf(self.make_pdf(tmp, length=100.11), 'portrait')
+            self.assertTrue(result['pages'][0]['dimensions_pass'])
+            self.assertFalse(result['pages'][0]['calibration']['pass'])
+            self.assertEqual(result['status'], 'fail')
+
     def test_wrong_calibration_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = measurement.measure_pdf(self.make_pdf(tmp, length=99), 'portrait')

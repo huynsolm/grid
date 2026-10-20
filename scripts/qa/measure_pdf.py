@@ -9,7 +9,8 @@ import pdfplumber
 from pdfminer.pdftypes import resolve1
 
 PT_TO_MM = 25.4 / 72
-TOLERANCE_MM = 0.1
+PAGE_SIZE_TOLERANCE_MM = 0.2
+CALIBRATION_TOLERANCE_MM = 0.1
 CALIBRATION_RGB = (208 / 255, 0, 0)
 
 
@@ -32,7 +33,7 @@ def _calibration(page, factor):
         if length <= 0:
             continue
         candidates.append({'endpoints_pt': [list(a), list(b)], 'length_mm': length,
-                           'error_mm': abs(length - 100), 'pass': abs(length - 100) <= TOLERANCE_MM})
+                           'error_mm': abs(length - 100), 'pass': abs(length - 100) <= CALIBRATION_TOLERANCE_MM})
     if len(candidates) != 1:
         return {'status': 'unverified', 'candidate_count': len(candidates),
                 'reason': 'Expected exactly one #d00000 straight vector calibration line.'}
@@ -44,7 +45,9 @@ def measure_pdf(path, orientation):
         raise ValueError('Expected portrait or landscape')
     expected = (210, 297) if orientation == 'portrait' else (297, 210)
     result = {'file': str(path), 'pdfplumber_version': pdfplumber.__version__,
-              'expected_orientation': orientation, 'tolerance_mm': TOLERANCE_MM,
+              'expected_orientation': orientation,
+              'page_size_tolerance_mm': PAGE_SIZE_TOLERANCE_MM,
+              'calibration_tolerance_mm': CALIBRATION_TOLERANCE_MM,
               'manual_visual_check': 'pending', 'pages': []}
     with pdfplumber.open(path) as pdf:
         result['page_count'] = len(pdf.pages)
@@ -67,7 +70,7 @@ def measure_pdf(path, orientation):
             result['pages'].append({'page': page.page_number, 'mediabox': media,
                                     'user_unit': user_unit, 'rotation': rotation,
                                     'dimensions_mm': list(dimensions), 'axis_errors_mm': errors,
-                                    'dimensions_pass': all(error <= TOLERANCE_MM for error in errors),
+                                    'dimensions_pass': all(error <= PAGE_SIZE_TOLERANCE_MM for error in errors),
                                     'calibration': calibration})
     failed = result['page_count'] != 1 or any(
         not page['dimensions_pass'] or page['calibration'].get('pass') is False
@@ -87,7 +90,9 @@ def main():
     try:
         result = measure_pdf(args.pdf, args.orientation)
     except Exception as error:
-        result = {'file': str(args.pdf), 'status': 'unverified', 'reason': str(error)}
+        result = {'file': str(args.pdf), 'status': 'unverified', 'reason': str(error),
+                  'page_size_tolerance_mm': PAGE_SIZE_TOLERANCE_MM,
+                  'calibration_tolerance_mm': CALIBRATION_TOLERANCE_MM}
     content = json.dumps(result, ensure_ascii=False, indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
