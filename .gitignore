@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+.venv/
+docs/qa/pdfs/
+docs/qa/tmp/
+.env
+.env.*
+!.env.example
